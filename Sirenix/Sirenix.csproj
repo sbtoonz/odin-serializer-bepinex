@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{E80CA2C0-DB81-443A-8998-8879561D9DF4}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Sirenix</RootNamespace>
+        <AssemblyName>Sirenix</AssemblyName>
+        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>11</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <Choose>
+        <When Condition="($(OS) == 'Unix' OR $(OS) == 'OSX') AND $(GamePath) == ''">
+            <PropertyGroup>
+                <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/Valheim</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/Library/Application Support/Steam/steamapps/common/Valheim/Contents/MacOS</GamePath>
+            </PropertyGroup>
+        </When>
+        <When Condition="($(OS) == 'Windows_NT') AND $(GamePath) == ''">
+            <PropertyGroup>
+                <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
+                <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
+                <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
+            </PropertyGroup>
+        </When>
+    </Choose>
+    <ItemGroup>
+        <Reference Include="mscorlib">
+          <HintPath>.$(GamePath)\unstripped_corlib\mscorlib.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine.AnimationModule">
+          <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+          <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+          <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities.Unsafe\UnsafeUtilities.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\Cache.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\DoubleLookupDictionary.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\EmitUtilities.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\FastTypeComparer.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\FieldInfoExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\Flags.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\GarbageFreeIterators.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ICache.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ICacheNotificationReceiver.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\IImmutableList.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ImmutableList.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\LinqExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\MemberAliasFieldInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\MemberAliasMethodInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\MemberAliasPropertyInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\MemberInfoExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\MethodInfoExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\Operator.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\PathUtilities.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\PropertyInfoExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ReferenceEqualityComparer.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\StringExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\TypeExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\UnityExtensions.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\UnityVersion.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ValueGetter.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\ValueSetter.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\WeakValueGetter.cs" />
+        <Compile Include="Sirenix.OdinSerializer.Utilities\WeakValueSetter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\AllowDeserializeInvalidDataAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\AlwaysFormatsSelfAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\AnimationCurveFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\AnySerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ArchitectureInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ArrayFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ArrayListFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BaseDataReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BaseDataReaderWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BaseDataWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BaseDictionaryKeyPathProvider.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BinaryDataReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BinaryDataWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BinaryEntryType.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BindTypeNameToTypeAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BooleanSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\BoundsFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Buffer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ByteSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CachedMemoryStream.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CharSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Color32Formatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ColorBlockFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ColorBlockFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ColorFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ComplexTypeSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CoroutineFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CustomFormatterAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CustomGenericFormatterAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CustomLogger.cs" />
+        <Compile Include="Sirenix.OdinSerializer\CustomSerializationPolicy.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DataFormat.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DateTimeFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DateTimeOffsetFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DebugContext.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DecimalSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DefaultLoggers.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DefaultSerializationBinder.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DelegateFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DelegateFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DerivedDictionaryFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DeserializationContext.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DictionaryFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DictionaryKeyUtility.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DoubleLookupDictionaryFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\DoubleSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EasyBaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EmittedAssemblyAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EmittedFormatterAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EmptyTypeFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EntryType.cs" />
+        <Compile Include="Sirenix.OdinSerializer\EnumSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ErrorHandlingPolicy.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ExcludeDataFromInspectorAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\FormatterEmitter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\FormatterLocationStep.cs" />
+        <Compile Include="Sirenix.OdinSerializer\FormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\FormatterUtilities.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GenericCollectionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GenericCollectionFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GlobalSerializationConfig.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GradientAlphaKeyFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GradientColorKeyFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GradientFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\GuidSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\HashSetFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IAskIfCanFormatTypes.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IDataReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IDataWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IDictionaryKeyPathProvider.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IExternalGuidReferenceResolver.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IExternalIndexReferenceResolver.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IExternalStringReferenceResolver.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ILogger.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Int16Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Int32Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Int64Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IntPtrSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IOverridesSerializationFormat.cs" />
+        <Compile Include="Sirenix.OdinSerializer\IOverridesSerializationPolicy.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ISelfFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ISerializableFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ISerializationPolicy.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ISupportsPrefabSerialization.cs" />
+        <Compile Include="Sirenix.OdinSerializer\JsonConfig.cs" />
+        <Compile Include="Sirenix.OdinSerializer\JsonDataReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\JsonDataWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\JsonTextReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\KeyframeFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\KeyValuePairFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\LayerMaskFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ListFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\LoggingPolicy.cs" />
+        <Compile Include="Sirenix.OdinSerializer\MethodInfoFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\MinimalBaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\MultiDimensionalArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\NodeInfo.cs" />
+        <Compile Include="Sirenix.OdinSerializer\NullableFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\OdinSerializeAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\PrefabModification.cs" />
+        <Compile Include="Sirenix.OdinSerializer\PrefabModificationType.cs" />
+        <Compile Include="Sirenix.OdinSerializer\PreviouslySerializedAsAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\PrimitiveArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ProperBitConverter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\QuaternionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\QueueFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\RectFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ReflectionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\ReflectionOrEmittedBaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\RegisterDictionaryKeyPathProviderAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\RegisterFormatterAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\RegisterFormatterLocatorAttribute.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SByteSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SelfFormatterFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SelfFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializableFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationAbortException.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationConfig.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationContext.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationData.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationNode.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationNodeDataReader.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationNodeDataReaderWriterConfig.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationNodeDataWriter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationPolicies.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializationUtility.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedBehaviour.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedComponent.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedMonoBehaviour.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedScriptableObject.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedStateMachineBehaviour.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SerializedUnityObject.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\SingleSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\StackFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\StringSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\TimeSpanFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\TwoWaySerializationBinder.cs" />
+        <Compile Include="Sirenix.OdinSerializer\TypeFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\TypeFormatterLocator.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UInt16Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UInt32Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UInt64Serializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UIntPtrSerializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UnityEventFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UnityReferenceResolver.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UnitySerializationInitializer.cs" />
+        <Compile Include="Sirenix.OdinSerializer\UnitySerializationUtility.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector2DictionaryKeyPathProvider.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector2Formatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector2IntFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector3DictionaryKeyPathProvider.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector3Formatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector3IntFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector4DictionaryKeyPathProvider.cs" />
+        <Compile Include="Sirenix.OdinSerializer\Vector4Formatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\VersionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakBaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakColorBlockFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakDelegateFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakDictionaryFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakDoubleLookupDictionaryFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakGenericCollectionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakHashSetFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakKeyValuePairFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakListFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakMethodInfoFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakMinimalBaseFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakMultiDimensionalArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakNullableFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakPrimitiveArrayFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakQueueFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakReflectionFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakSelfFormatterFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakSerializableFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakStackFormatter.cs" />
+        <Compile Include="Sirenix.OdinSerializer\WeakUnityEventFormatter.cs" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
